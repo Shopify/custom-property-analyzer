@@ -1,7 +1,12 @@
 {
   "scripts": {
+    "dev": "touch ./src/playground.ts && nodemon",
     "lint": "yarn run eslint '**/*.ts'",
-    "test": "jest"
+    "type-check": "tsc --project ./tsconfig.json --noEmit",
+    "test": "jest",
+    "prebuild": "yarn clean",
+    "build": "tsc --project ./tsconfig.json",
+    "clean": "rm -rf ./dist"
   },
   "prettier": {
     "arrowParens": "always",
