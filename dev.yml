@@ -1,0 +1,11 @@
+name: custom-property-analyzer
+up:
+  - node:
+      yarn: true
+      version: v10.13.0
+
+commands:
+  start: yarn run dev
+  test: yarn run test
+  build: yarn run build
+  type-check: yarn run type-check
