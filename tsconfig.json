@@ -18,8 +18,7 @@
     "strictFunctionTypes": true,
     "strictPropertyInitialization": true,
     "skipLibCheck": false,
-    "esModuleInterop": true,
-    "resolveJsonModule": true
+    "esModuleInterop": true
   },
   "exclude": ["**/tests/**"],
   "include": ["./**/*.ts", "./**/*.tsx"]
