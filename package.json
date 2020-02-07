@@ -1,4 +1,5 @@
 {
+  "name": "@shopify/custom-property-analyzer",
   "scripts": {
     "dev": "touch ./src/playground.ts && nodemon",
     "lint": "yarn run eslint '**/*.ts'",
@@ -6,13 +7,17 @@
     "test": "jest",
     "prebuild": "yarn clean",
     "build": "tsc --project ./tsconfig.json",
-    "clean": "rm -rf ./dist"
+    "clean": "rm -rf ./dist",
+    "custom-property-analyzer": "ts-node src/cli.ts"
   },
   "prettier": {
     "arrowParens": "always",
     "singleQuote": true,
     "trailingComma": "all",
     "bracketSpacing": false
+  },
+  "bin": {
+    "custom-property-analyzer": "dist/cli.js"
   },
   "devDependencies": {
     "@babel/core": "^7.8.4",

@@ -17,6 +17,17 @@
     ],
     "import/no-default-export": ["error"],
     "shopify/no-ancestor-directory-import": "error",
-    "node/no-callback-literal": "off"
+    "node/no-callback-literal": "off",
+    "node/shebang": [
+      "error",
+      {
+        "convertPath": [
+          {
+            "include": ["src/**/*.ts"],
+            "exclude": ["**/cli.ts"]
+          }
+        ]
+      }
+    ]
   }
 }
