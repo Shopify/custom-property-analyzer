@@ -1,0 +1,16 @@
+{
+  "scripts": {
+    "lint": "yarn run eslint '**/*.ts'"
+  },
+  "prettier": {
+    "arrowParens": "always",
+    "singleQuote": true,
+    "trailingComma": "all",
+    "bracketSpacing": false
+  },
+  "devDependencies": {
+    "eslint": "^6.8.0",
+    "eslint-plugin-shopify": "^34.0.0",
+    "prettier": "^1.19.1"
+  }
+}

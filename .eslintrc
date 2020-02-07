@@ -1,0 +1,22 @@
+{
+  "extends": [
+    "plugin:shopify/typescript",
+    "plugin:shopify/jest",
+    "plugin:shopify/node",
+    "plugin:shopify/polaris",
+    "plugin:shopify/prettier"
+  ],
+  "rules": {
+    "no-console": "error",
+    "lines-around-comment": [
+      "error",
+      {
+        "beforeBlockComment": false,
+        "allowBlockStart": false
+      }
+    ],
+    "import/no-default-export": ["error"],
+    "shopify/no-ancestor-directory-import": "error",
+    "node/no-callback-literal": "off"
+  }
+}
