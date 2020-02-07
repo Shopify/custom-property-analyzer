@@ -1,5 +1,33 @@
 {
   "name": "@shopify/custom-property-analyzer",
+  "description": "Custom Property Analyzer is a tool for gathering statistics and identifying errors in css custom properties.",
+  "version": "0.0.1",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Shopify/custom-property-analyzer.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Shopify/custom-property-analyzer/issues"
+  },
+  "author": "Shopify <dev@shopify.com>",
+  "homepage": "https://github.com/Shopify/custom-property-analyzer#readme",
+  "license": "MIT",
+  "main": "dist/index.js",
+  "files": [
+    "dist"
+  ],
+  "keywords": [
+    "shopify",
+    "css",
+    "scss",
+    "custom",
+    "properties",
+    "property",
+    "css custom properties",
+    "stats",
+    "lint"
+  ],
+  "types": "dist/types/index.d.ts",
   "scripts": {
     "dev": "touch ./src/playground.ts && nodemon",
     "lint": "yarn run eslint '**/*.ts'",
