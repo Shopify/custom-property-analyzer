@@ -18,6 +18,7 @@ interface Options {
   customPropertyPattern?: string;
   pattern?: string;
   logLevel?: LogLevel;
+  skipErrors?: boolean;
 }
 
 program
@@ -43,6 +44,11 @@ program
     'Determines the errors displayed. `verbose` will display everything. `info` will display everything except errors. `error` will only display errors. And `never` will not display any logs',
     'verbose',
   )
+  .option(
+    '-S, --skip-errors <boolean>',
+    'Determines if error analysis will be executed.',
+    'false',
+  )
   .version('0.0.1', '-v, --version', 'Output the current version');
 
 program.parse(process.argv);
@@ -56,6 +62,7 @@ const {
   customPropertyPattern,
   pattern,
   logLevel,
+  skipErrors,
 } = program;
 
 main({
@@ -67,6 +74,7 @@ main({
   customPropertyPattern,
   pattern,
   logLevel,
+  skipErrors,
 });
 
 function main({
@@ -78,6 +86,7 @@ function main({
   customPropertyPattern,
   pattern,
   logLevel = 'verbose',
+  skipErrors = false,
 }: Options) {
   return new Promise((resolve, reject) => {
     let knownCustomProperties: string[] = [];
@@ -97,6 +106,7 @@ function main({
       knownCustomProperties,
       customPropertyPattern,
       logLevel,
+      skipErrors,
     })
       .then(([properties, errors, stats]) => {
         if (output) {

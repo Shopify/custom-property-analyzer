@@ -86,6 +86,11 @@ interface Options {
    * @default 'verbose'
    */
   logLevel?: LogLevel;
+  /**
+   * Determines if error analysis will be executed.
+   * @default 'false'
+   */
+  skipErrors?: boolean;
 }
 
 export function analyzeCustomProperties({
@@ -93,6 +98,7 @@ export function analyzeCustomProperties({
   customPropertyPattern,
   knownCustomProperties = [],
   logLevel = 'verbose',
+  skipErrors = false,
 }: Options): Promise<
   [CustomPropertyMap, CustomPropertyMap, CustomPropertyStats]
 > {
@@ -132,7 +138,8 @@ export function analyzeCustomProperties({
         if (
           !customProperties[property].declaration &&
           !customProperties[property].usedFromDeclaration &&
-          !knownCustomProperties.includes(property)
+          !knownCustomProperties.includes(property) &&
+          !skipErrors
         ) {
           customPropertyErrors[property] = customProperties[property];
         }
