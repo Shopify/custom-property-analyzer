@@ -15,11 +15,13 @@
     "**/.hg": true,
     "**/.svn": true,
     "**/node_modules": true,
-    ".{dev,shadowenv.d}": true
+    ".{dev,shadowenv.d}": true,
+    "**/dist": true
   },
   "javascript.validate.enable": false,
   "search.exclude": {
-    "**/node_modules": true
+    "**/node_modules": true,
+    "**/dist": true
   },
   "typescript.tsdk": "./node_modules/typescript/lib"
 }
