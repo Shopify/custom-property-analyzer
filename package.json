@@ -37,9 +37,10 @@
     "lint": "yarn run eslint '**/*.ts'",
     "type-check": "tsc --project ./tsconfig.json --noEmit",
     "test": "jest",
+    "test:coverage": "yarn run test --collectCoverage true && open coverage/lcov-report/index.html",
     "prebuild": "yarn clean",
     "build": "tsc --project ./tsconfig.json",
-    "clean": "rm -rf ./dist",
+    "clean": "rm -rf ./dist ./coverage",
     "custom-property-analyzer": "ts-node src/cli.ts"
   },
   "prettier": {
