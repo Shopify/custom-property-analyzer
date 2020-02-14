@@ -5,6 +5,7 @@ import {readFileSync, writeFileSync} from 'fs';
 import program from 'commander';
 
 import {analyzeCustomProperties} from './analyze-custom-properties';
+import {stringToBoolean} from './string-to-boolean';
 
 type LogLevel = 'verbose' | 'info' | 'error' | 'never';
 
@@ -59,9 +60,9 @@ const {
 
 main({
   output,
-  outputErrors,
-  outputStats,
-  outputCustomProperties,
+  outputErrors: stringToBoolean(outputErrors),
+  outputStats: stringToBoolean(outputStats),
+  outputCustomProperties: stringToBoolean(outputCustomProperties),
   input,
   customPropertyPattern,
   pattern,
