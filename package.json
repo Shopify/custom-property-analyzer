@@ -6,6 +6,10 @@
     "type": "git",
     "url": "git+https://github.com/Shopify/custom-property-analyzer.git"
   },
+  "publishConfig": {
+    "access": "public",
+    "@shopify:registry": "https://registry.npmjs.org/"
+  },
   "bugs": {
     "url": "https://github.com/Shopify/custom-property-analyzer/issues"
   },
