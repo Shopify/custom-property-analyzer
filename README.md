@@ -46,7 +46,7 @@ $ ./node_modules/.bin/@shopify/custom-property-analyzer --pattern 'src/**/*.scss
 | -v, --version                  |                                           |              | Output the current version                                                                                                                                                                |
 | -h, --help                     |                                           |              | output usage information                                                                                                                                                                  |
 
-#### analyzeCustomProperties
+### analyzeCustomProperties
 
 ```ts
 // Default export
