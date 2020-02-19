@@ -88,3 +88,10 @@ export const mockArguments: Node = {
   start: mockStart,
   next: mockNext,
 };
+
+export const mockStringSingle = {
+  type: 'string_single',
+  value: '',
+  start: mockStart,
+  next: mockNext,
+};
