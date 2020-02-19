@@ -95,3 +95,131 @@ export const mockStringSingle = {
   start: mockStart,
   next: mockNext,
 };
+
+export const mockCustomPropertyDeclaration = {
+  type: 'declaration',
+  value: [
+    {
+      type: 'property',
+      value: [
+        {
+          type: 'operator',
+          value: '-',
+          start: mockStart,
+          next: mockNext,
+        },
+        {
+          type: 'identifier',
+          value: 'moz-osx-font-smoothing',
+          start: mockStart,
+          next: mockNext,
+        },
+      ],
+      start: mockStart,
+      next: mockNext,
+    },
+    {
+      type: 'punctuation',
+      value: ':',
+      start: mockStart,
+      next: mockNext,
+    },
+    {
+      type: 'value',
+      value: [
+        {
+          type: 'space',
+          value: ' ',
+          start: mockStart,
+          next: mockNext,
+        },
+        {
+          type: 'identifier',
+          value: 'grayscale',
+          start: mockStart,
+          next: mockNext,
+        },
+      ],
+      start: mockStart,
+      next: mockNext,
+    },
+    {
+      type: 'punctuation',
+      value: ';',
+      start: mockStart,
+      next: mockNext,
+    },
+  ],
+  start: mockStart,
+};
+
+export const mockPropertyDeclaration = {
+  type: 'declaration',
+  value: [
+    {
+      type: 'property',
+      value: [
+        {
+          type: 'identifier',
+          value: 'font-size',
+          start: mockStart,
+          next: mockNext,
+        },
+      ],
+      start: mockStart,
+      next: mockNext,
+    },
+    {
+      type: 'punctuation',
+      value: ':',
+      start: mockStart,
+      next: mockNext,
+    },
+    {
+      type: 'value',
+      value: [
+        {
+          type: 'space',
+          value: ' ',
+          start: mockStart,
+          next: mockNext,
+        },
+        {
+          type: 'function',
+          value: [
+            {
+              type: 'identifier',
+              value: 'font-size',
+              start: mockStart,
+              next: mockNext,
+            },
+            {
+              type: 'arguments',
+              value: [
+                {
+                  type: 'identifier',
+                  value: 'display-medium',
+                  start: mockStart,
+                  next: mockNext,
+                },
+              ],
+              start: mockStart,
+              next: mockNext,
+            },
+          ],
+          start: mockStart,
+          next: mockNext,
+        },
+      ],
+      start: mockStart,
+      next: mockNext,
+    },
+    {
+      type: 'punctuation',
+      value: ';',
+      start: mockStart,
+      next: mockNext,
+    },
+  ],
+  start: mockStart,
+};
