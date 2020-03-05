@@ -19,6 +19,7 @@ interface Options {
   pattern?: string;
   logLevel?: LogLevel;
   skipErrors?: boolean;
+  ignore?: string;
 }
 
 program
@@ -49,6 +50,10 @@ program
     'Determines if error analysis will be executed.',
     'false',
   )
+  .option(
+    '-I, --ignore <string|string[]>',
+    'A glob pattern or array of glob patterns to exclude matches. The string array only accepts json format.',
+  )
   .version('0.0.1', '-v, --version', 'Output the current version');
 
 program.parse(process.argv);
@@ -63,6 +68,7 @@ const {
   pattern,
   logLevel,
   skipErrors,
+  ignore,
 } = program;
 
 main({
@@ -75,6 +81,7 @@ main({
   pattern,
   logLevel,
   skipErrors: stringToBoolean(skipErrors),
+  ignore,
 });
 
 function main({
@@ -87,6 +94,7 @@ function main({
   pattern,
   logLevel = 'verbose',
   skipErrors,
+  ignore,
 }: Options) {
   return new Promise((resolve, reject) => {
     let knownCustomProperties: string[] = [];
@@ -107,6 +115,7 @@ function main({
       customPropertyPattern,
       logLevel,
       skipErrors,
+      ignore,
     })
       .then(([properties, errors, stats]) => {
         if (output) {

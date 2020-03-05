@@ -92,6 +92,10 @@ interface Options {
    * @default 'false'
    */
   skipErrors?: boolean;
+  /**
+   * A glob pattern or array of glob patterns to exclude matches.
+   */
+  ignore?: string | string[];
 }
 
 export function analyzeCustomProperties({
@@ -100,11 +104,19 @@ export function analyzeCustomProperties({
   knownCustomProperties = [],
   logLevel = 'verbose',
   skipErrors = false,
+  ignore,
 }: Options): Promise<
   [CustomPropertyMap, CustomPropertyMap, CustomPropertyStats]
 > {
   return new Promise((resolve, reject) => {
-    glob(pattern, {}, function(err, files) {
+    const ignorePattern =
+      ignore &&
+      typeof ignore === 'string' &&
+      ignore.startsWith('[') &&
+      ignore.endsWith(']')
+        ? JSON.parse(ignore)
+        : ignore;
+    glob(pattern, {ignore: ignorePattern}, function(err, files) {
       if (err) reject(err);
       const customProperties: CustomPropertyMap = {};
       const customPropertyDeclarations: ONCheck = {};
