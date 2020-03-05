@@ -74,19 +74,19 @@ main({
   customPropertyPattern,
   pattern,
   logLevel,
-  skipErrors,
+  skipErrors: stringToBoolean(skipErrors),
 });
 
 function main({
   output,
-  outputErrors = true,
-  outputStats = true,
-  outputCustomProperties = true,
+  outputErrors,
+  outputStats,
+  outputCustomProperties,
   input,
   customPropertyPattern,
   pattern,
   logLevel = 'verbose',
-  skipErrors = false,
+  skipErrors,
 }: Options) {
   return new Promise((resolve, reject) => {
     let knownCustomProperties: string[] = [];

@@ -87,6 +87,7 @@ interface Options {
 interface CustomPropertyStats {
   uniqueCustomProperties: number;
   totalCustomProperties: number;
+  fileCount: number;
 }
 
 interface InputStreamPosition {

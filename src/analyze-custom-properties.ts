@@ -45,6 +45,7 @@ interface CustomPropertyMetaData extends BaseLocation {
 interface CustomPropertyStats {
   uniqueCustomProperties: number;
   totalCustomProperties: number;
+  fileCount: number;
 }
 
 interface CustomPropertyMap {
@@ -103,15 +104,15 @@ export function analyzeCustomProperties({
   [CustomPropertyMap, CustomPropertyMap, CustomPropertyStats]
 > {
   return new Promise((resolve, reject) => {
-    const customProperties: CustomPropertyMap = {};
-    const customPropertyDeclarations: ONCheck = {};
-    const customPropertyStats: CustomPropertyStats = {
-      uniqueCustomProperties: 0,
-      totalCustomProperties: 0,
-    };
-
     glob(pattern, {}, function(err, files) {
       if (err) reject(err);
+      const customProperties: CustomPropertyMap = {};
+      const customPropertyDeclarations: ONCheck = {};
+      const customPropertyStats: CustomPropertyStats = {
+        uniqueCustomProperties: 0,
+        totalCustomProperties: 0,
+        fileCount: files.length,
+      };
 
       for (const file of files) {
         handleFile(
@@ -213,7 +214,10 @@ ${locations}
     )}.
 Number of ${chalk.cyan('unique')} custom properties: ${chalk.yellow(
       `${customPropertyStats.uniqueCustomProperties}`,
-    )}`);
+    )}
+${chalk.yellow(customPropertyStats.fileCount)} files have been ${chalk.green(
+      'parsed',
+    )}.`);
   }
 }
 
