@@ -35,7 +35,7 @@
   "scripts": {
     "dev": "touch ./src/playground.ts && nodemon",
     "lint": "yarn run eslint '**/*.ts'",
-    "type-check": "tsc --project ./tsconfig.json --noEmit",
+    "type-check": "tsc --project ./tsconfig.json --noEmit --skipLibCheck",
     "test": "jest",
     "test:coverage": "yarn run test --collectCoverage true && open coverage/lcov-report/index.html",
     "prebuild": "yarn clean",
