@@ -4010,6 +4010,11 @@ react-is@^16.12.0, react-is@^16.8.1:
   version "16.12.0"
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-16.12.0.tgz#2cc0fe0fba742d97fd527c42a13bec4eeb06241c"
 
+read-by-char@^0.1.0:
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/read-by-char/-/read-by-char-0.1.0.tgz#3e101755b6823fad34d223a63efd9dc6a44aa40d"
+  integrity sha512-0vL+HlrV9OSUvIVr55ULT4X6s5h+Os5vE1YcbX/l1y1jcTpclBu/HyKxk3FqlbJfDkTtADLN64PECixuhVzzpw==
+
 read-pkg-up@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/read-pkg-up/-/read-pkg-up-2.0.0.tgz#6b72a8048984e0c41e79510fd5e9fa99b3b549be"
