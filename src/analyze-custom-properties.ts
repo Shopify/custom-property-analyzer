@@ -1,45 +1,21 @@
-import {readFileSync} from 'fs';
-
 import glob from 'glob';
-import {parse, InputStreamPosition} from 'scss-parser';
 import chalk from 'chalk';
 
-// Constants
-const COMMA = ',';
-const SPACE = 'space';
-const KIND = {
-  Arguments: 'arguments',
-  Function: 'function',
-  Var: 'var',
-  Declaration: 'declaration',
-  Property: 'property',
-  Operator: 'operator',
-};
+import {VarParser, BaseLocation, CustomProperty} from './parser';
 
 interface ONCheck {
   [key: string]: boolean;
 }
 
-// @types/scss-parser don't match the packages types
-// the packages has `next` however the @types provide `end`
-export interface Node {
-  type: string;
-  value: string | Node[];
-  start?: InputStreamPosition;
-  next?: InputStreamPosition;
-}
-
-interface BaseLocation {
-  start: InputStreamPosition;
-  end: InputStreamPosition;
-}
-
-interface Location extends BaseLocation {
+interface Location {
   file: string;
+  start: BaseLocation;
+  end: BaseLocation;
 }
 
-interface CustomPropertyMetaData extends BaseLocation {
-  name: string;
+interface CustomPropertyMetaData extends Location {
+  value: string;
+  declaration: boolean;
 }
 
 interface CustomPropertyStats {
@@ -126,46 +102,65 @@ export function analyzeCustomProperties({
         fileCount: files.length,
       };
 
+      const customPropertiesPromises: ReturnType<VarParser['walk']>[] = [];
       for (const file of files) {
-        handleFile(
-          file,
-          customPropertyPattern,
-          customProperties,
-          customPropertyDeclarations,
-          customPropertyStats,
-        );
+        customPropertiesPromises.push(new VarParser(file).walk());
       }
 
-      const customPropertyErrors: CustomPropertyMap = {};
-      for (const property in customProperties) {
-        if (!Object.prototype.hasOwnProperty.call(customProperties, property)) {
-          continue;
-        }
-        if (
-          !customProperties[property].declaration &&
-          customPropertyDeclarations[property]
-        ) {
-          customProperties[property].usedFromDeclaration = true;
-        }
+      Promise.all(customPropertiesPromises)
+        .then((properties) => {
+          const flattenedProperties = ([] as CustomProperty[]).concat(
+            ...properties,
+          );
 
-        if (
-          !customProperties[property].declaration &&
-          !customProperties[property].usedFromDeclaration &&
-          !knownCustomProperties.includes(property) &&
-          !skipErrors
-        ) {
-          customPropertyErrors[property] = customProperties[property];
-        }
-      }
+          for (const property of flattenedProperties) {
+            addCustomProperty(
+              property,
+              customPropertyPattern,
+              customProperties,
+              customPropertyDeclarations,
+              customPropertyStats,
+            );
+          }
 
-      handleMessage(
-        customProperties,
-        customPropertyErrors,
-        customPropertyStats,
-        logLevel,
-      );
+          const customPropertyErrors: CustomPropertyMap = {};
+          for (const property in customProperties) {
+            if (
+              !Object.prototype.hasOwnProperty.call(customProperties, property)
+            ) {
+              continue;
+            }
+            if (
+              !customProperties[property].declaration &&
+              customPropertyDeclarations[property]
+            ) {
+              customProperties[property].usedFromDeclaration = true;
+            }
 
-      resolve([customProperties, customPropertyErrors, customPropertyStats]);
+            if (
+              !customProperties[property].declaration &&
+              !customProperties[property].usedFromDeclaration &&
+              !knownCustomProperties.includes(property) &&
+              !skipErrors
+            ) {
+              customPropertyErrors[property] = customProperties[property];
+            }
+          }
+
+          handleMessage(
+            customProperties,
+            customPropertyErrors,
+            customPropertyStats,
+            logLevel,
+          );
+
+          resolve([
+            customProperties,
+            customPropertyErrors,
+            customPropertyStats,
+          ]);
+        })
+        .catch(reject);
     });
   });
 }
@@ -233,137 +228,31 @@ ${chalk.yellow(customPropertyStats.fileCount)} files have been ${chalk.green(
   }
 }
 
-export function handleFile(
-  file: string,
+function addCustomProperty(
+  {value, start, end, declaration, file}: CustomPropertyMetaData,
   customPropertyPattern: string | undefined,
   customProperties: CustomPropertyMap,
   customPropertyDeclarations: ONCheck,
   customPropertyStats: CustomPropertyStats,
 ) {
-  const sourceNode = parse(readFileSync(file, {encoding: 'utf8'}));
-  if (!sourceNode.value || !Array.isArray(sourceNode.value)) return;
-  recurseAndVisitASTNodes(sourceNode.value);
-
-  function recurseAndVisitASTNodes(node: Node | Node[]) {
-    if (Array.isArray(node)) {
-      node.forEach(recurseAndVisitASTNodes);
-      return;
-    }
-
-    switch (node.type) {
-      case KIND.Function:
-        if (isVarFunction(node)) {
-          visitAll(node, (functionValueNode) => {
-            if (functionValueNode.type === KIND.Arguments) {
-              addCustomProperty(
-                getCustomPropertyMetaData(functionValueNode),
-                false,
-              );
-            }
-          });
-        }
-        break;
-      case KIND.Declaration:
-        if (
-          isCustomPropertyDeclaration(node) &&
-          typeof node.value[0] !== 'string'
-        ) {
-          addCustomProperty(getCustomPropertyMetaData(node.value[0]), true);
-        }
-    }
-
-    visitAll(node, recurseAndVisitASTNodes);
+  if (customPropertyPattern && !new RegExp(customPropertyPattern).test(value)) {
+    return;
   }
-
-  function addCustomProperty(
-    {name, start, end}: CustomPropertyMetaData,
-    declaration: boolean,
-  ) {
-    if (
-      customPropertyPattern &&
-      !new RegExp(customPropertyPattern).test(name)
-    ) {
-      return;
-    }
-    customPropertyStats.totalCustomProperties += 1;
-    customPropertyDeclarations[name] = declaration;
-    if (!customProperties[name]) {
-      customProperties[name] = {
-        declaration,
-        usedFromDeclaration: false,
-        count: 0,
-        locations: [],
-      };
-      customPropertyStats.uniqueCustomProperties += 1;
-    }
-    customProperties[name].count += 1;
-    customProperties[name].locations.push({
-      start,
-      end,
-      file,
-    });
+  customPropertyStats.totalCustomProperties += 1;
+  customPropertyDeclarations[value] = declaration;
+  if (!customProperties[value]) {
+    customProperties[value] = {
+      declaration,
+      usedFromDeclaration: false,
+      count: 0,
+      locations: [],
+    };
+    customPropertyStats.uniqueCustomProperties += 1;
   }
-}
-
-export function isCustomPropertyDeclaration(node: Node) {
-  return (
-    Array.isArray(node.value) &&
-    node.value[0].type === KIND.Property &&
-    typeof node.value[0].value[0] === 'object' &&
-    node.value[0].value[0].type === KIND.Operator
-  );
-}
-
-export function isVarFunction(node: Node) {
-  return Array.isArray(node.value) && node.value[0].value === KIND.Var;
-}
-
-export function visitAll(node: Node, cb: (node: Node) => void) {
-  if (!node.value || !Array.isArray(node.value)) return;
-  node.value.forEach(cb);
-}
-
-export function getCustomPropertyMetaData(node: Node): CustomPropertyMetaData {
-  let start: InputStreamPosition | undefined;
-  let end: InputStreamPosition | undefined;
-  let name = '';
-
-  let i = 0;
-  while (i < node.value.length) {
-    const charNode = node.value[i];
-
-    if (
-      typeof charNode !== 'object' ||
-      charNode.value === COMMA ||
-      charNode.value === SPACE
-    ) {
-      const prevCharNode = node.value[i - 1];
-
-      if (typeof prevCharNode === 'object') {
-        end = prevCharNode.next;
-      }
-
-      break;
-    }
-
-    if (i === 0) {
-      start = charNode.start;
-    }
-
-    name += charNode.value;
-
-    i++;
-
-    if (i === node.value.length) {
-      end = charNode.next;
-    }
-  }
-
-  if (!end || !start) {
-    throw Error(
-      `An error has occurred building a custom property's ("${name}") meta data. A start or end position was not found.`,
-    );
-  }
-
-  return {name: name.trim(), start, end};
+  customProperties[value].count += 1;
+  customProperties[value].locations.push({
+    start,
+    end,
+    file,
+  });
 }
