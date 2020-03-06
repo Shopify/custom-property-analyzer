@@ -38,7 +38,8 @@ export interface CustomProperty extends Location {
 }
 
 export class VarParser {
-  vars: CustomProperty[] = [];
+  varsFromLastParse: CustomProperty[] = [];
+  private vars: CustomProperty[] = [];
   private varPosition = VarPosition.Zero;
   private commentPosition = CommentPosition.Zero;
   private declarationPosition = DeclarationPosition.Zero;
@@ -68,7 +69,8 @@ export class VarParser {
   walk(): Promise<CustomProperty[]> {
     return new Promise((resolve) => {
       readByChar(this.file, this.parseBits, () => {
-        resolve(this.vars);
+        this.resetParser();
+        resolve(this.varsFromLastParse);
       });
     });
   }
@@ -261,5 +263,18 @@ export class VarParser {
       line,
       column,
     };
+  }
+
+  private resetParser() {
+    this.varsFromLastParse = this.vars;
+    this.vars = [];
+    this.varPosition = VarPosition.Zero;
+    this.commentPosition = CommentPosition.Zero;
+    this.declarationPosition = DeclarationPosition.Zero;
+    this.blocks = new Stack<number>();
+    this.multiLineCommentNumber = null;
+    this.resetVar();
+    this.hasDelimiter = false;
+    this.cursor = 0;
   }
 }
