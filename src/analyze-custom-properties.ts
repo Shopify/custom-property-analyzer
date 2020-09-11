@@ -27,7 +27,7 @@ interface CustomPropertyStats {
 interface CustomPropertyMap {
   [key: string]: {
     declaration: boolean;
-    usedFromDeclaration: boolean;
+    maybeUsedFromDeclaration: boolean;
     count: number;
     locations: Location[];
   };
@@ -134,12 +134,12 @@ export function analyzeCustomProperties({
               !customProperties[property].declaration &&
               customPropertyDeclarations[property]
             ) {
-              customProperties[property].usedFromDeclaration = true;
+              customProperties[property].maybeUsedFromDeclaration = true;
             }
 
             if (
               !customProperties[property].declaration &&
-              !customProperties[property].usedFromDeclaration &&
+              !customProperties[property].maybeUsedFromDeclaration &&
               !knownCustomProperties.includes(property) &&
               !skipErrors
             ) {
@@ -199,10 +199,12 @@ ${locations}
     const customPropertiesForTable = Object.keys(customProperties).reduce<
       TableCustomProperty
     >((acc, key) => {
-      const {declaration, usedFromDeclaration, count} = customProperties[key];
+      const {declaration, maybeUsedFromDeclaration, count} = customProperties[
+        key
+      ];
       acc[key] = {
         declaration,
-        usedFromDeclaration,
+        maybeUsedFromDeclaration,
         count,
       };
 
@@ -243,7 +245,7 @@ function addCustomProperty(
   if (!customProperties[value]) {
     customProperties[value] = {
       declaration,
-      usedFromDeclaration: false,
+      maybeUsedFromDeclaration: false,
       count: 0,
       locations: [],
     };

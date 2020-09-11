@@ -4,7 +4,7 @@ const mockNext = {cursor: 6841, line: 270, column: 46};
 export const mockCustomPropertyErrors = {
   '--p-border-radius-base': {
     declaration: false,
-    usedFromDeclaration: false,
+    maybeUsedFromDeclaration: false,
     count: 1,
     locations: [
       {
@@ -19,7 +19,7 @@ export const mockCustomPropertyErrors = {
 export const mockCustomProperties = {
   '--Polaris-RangeSlider-progress-lower': {
     declaration: false,
-    usedFromDeclaration: false,
+    maybeUsedFromDeclaration: false,
     count: 4,
     locations: [
       {
@@ -46,7 +46,7 @@ export const mockCustomProperties = {
   },
   '--Polaris-RangeSlider-progress-upper': {
     declaration: false,
-    usedFromDeclaration: false,
+    maybeUsedFromDeclaration: false,
     count: 4,
     locations: [
       {
@@ -73,7 +73,7 @@ export const mockCustomProperties = {
   },
   '--progress-lower': {
     declaration: true,
-    usedFromDeclaration: false,
+    maybeUsedFromDeclaration: false,
     count: 4,
     locations: [
       {
