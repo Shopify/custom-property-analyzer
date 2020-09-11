@@ -1,7 +1,12 @@
 import readByChar from 'read-by-char';
 
 import {Stack} from './stack';
-import {VarPosition, CommentPosition, DeclarationPosition} from './position';
+import {
+  VarPosition,
+  CommentPosition,
+  DeclarationPosition,
+  InterpolationPosition,
+} from './position';
 import {
   BACKSLASH,
   ASTERISK,
@@ -18,6 +23,7 @@ import {
   PAREN_LEFT,
   PAREN_RIGHT,
   COMMA,
+  HASH,
 } from './punctuation';
 
 export interface BaseLocation {
@@ -43,6 +49,7 @@ export class VarParser {
   private varPosition = VarPosition.Zero;
   private commentPosition = CommentPosition.Zero;
   private declarationPosition = DeclarationPosition.Zero;
+  private interpolationPosition = InterpolationPosition.Zero;
   private blocks = new Stack<number>();
   private multiLineCommentNumber: number | null = null;
   private currentVar = '';
@@ -74,6 +81,28 @@ export class VarParser {
       });
     });
   }
+
+  private handleInterpolation = (char: string) => {
+    switch (this.interpolationPosition) {
+      case InterpolationPosition.Zero:
+        this.interpolationPosition = InterpolationPosition.One;
+        break;
+      case InterpolationPosition.One:
+        if (char === CURLY_LEFT) {
+          this.interpolationPosition = InterpolationPosition.Two;
+        } else {
+          this.interpolationPosition = InterpolationPosition.Zero;
+        }
+
+        break;
+      case InterpolationPosition.Two:
+        if (char === CURLY_RIGHT) {
+          this.interpolationPosition = InterpolationPosition.Zero;
+        }
+
+        break;
+    }
+  };
 
   private handleComment = (char: string, _column: number, line: number) => {
     switch (this.commentPosition) {
@@ -191,6 +220,9 @@ export class VarParser {
     const hadDelimiter = this.hasDelimiter;
     if (this.hasDelimiter && char !== SPACE) this.hasDelimiter = false;
 
+    const inInterpolation =
+      this.interpolationPosition > InterpolationPosition.Zero;
+
     if (hadMultiLineComment) {
       this.multiLineCommentNumber = null;
       this.commentPosition = CommentPosition.Zero;
@@ -203,6 +235,8 @@ export class VarParser {
       this.commentPosition > CommentPosition.Zero
     ) {
       this.handleComment(char, column, line);
+    } else if (char === HASH || inInterpolation) {
+      this.handleInterpolation(char);
     } else if (char === CURLY_LEFT || char === CURLY_RIGHT) {
       this.handleBlock(char);
     } else if (char === SEMI_COLON) {

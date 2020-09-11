@@ -14,3 +14,4 @@ export const R = 'r';
 export const PAREN_LEFT = '(';
 export const PAREN_RIGHT = ')';
 export const COMMA = ',';
+export const HASH = '#';

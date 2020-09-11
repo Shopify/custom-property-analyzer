@@ -32,3 +32,12 @@ export enum DeclarationPosition {
   // Located second `-`
   Two,
 }
+
+export enum InterpolationPosition {
+  // Without interpolation
+  Zero,
+  // Located #
+  One,
+  // Location {
+  Two,
+}
