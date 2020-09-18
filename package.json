@@ -10,6 +10,9 @@
     "access": "public",
     "@shopify:registry": "https://registry.npmjs.org/"
   },
+  "engines": {
+    "node": ">=12"
+  },
   "bugs": {
     "url": "https://github.com/Shopify/custom-property-analyzer/issues"
   },
