@@ -11,7 +11,7 @@
     "@shopify:registry": "https://registry.npmjs.org/"
   },
   "engines": {
-    "node": ">=12"
+    "node": ">=10"
   },
   "bugs": {
     "url": "https://github.com/Shopify/custom-property-analyzer/issues"
