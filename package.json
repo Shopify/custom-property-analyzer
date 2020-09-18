@@ -1,7 +1,7 @@
 {
   "name": "@shopify/custom-property-analyzer",
   "description": "Custom Property Analyzer is a tool for gathering statistics and identifying errors in css custom properties.",
-  "version": "0.0.1",
+  "version": "0.1.0-beta.3",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Shopify/custom-property-analyzer.git"
@@ -9,6 +9,9 @@
   "publishConfig": {
     "access": "public",
     "@shopify:registry": "https://registry.npmjs.org/"
+  },
+  "engines": {
+    "node": ">=10"
   },
   "bugs": {
     "url": "https://github.com/Shopify/custom-property-analyzer/issues"
@@ -41,7 +44,8 @@
     "prebuild": "yarn clean",
     "build": "tsc --project ./tsconfig.json",
     "clean": "rm -rf ./dist ./coverage",
-    "custom-property-analyzer": "ts-node src/cli.ts"
+    "custom-property-analyzer": "ts-node src/cli.ts",
+    "prepublish": "yarn run build"
   },
   "prettier": {
     "arrowParens": "always",
@@ -54,25 +58,26 @@
   },
   "devDependencies": {
     "@babel/core": "^7.8.4",
+    "@babel/plugin-proposal-class-properties": "^7.8.3",
     "@babel/preset-env": "^7.8.4",
     "@babel/preset-typescript": "^7.8.3",
     "@types/glob": "^7.1.1",
+    "@types/jest": "^25.1.1",
+    "@types/node": "^13.7.0",
     "@types/scss-parser": "^1.0.0",
     "babel-jest": "^25.1.0",
     "eslint": "^6.8.0",
     "eslint-plugin-shopify": "^34.0.0",
+    "jest": "^25.1.0",
     "nodemon": "^2.0.2",
     "prettier": "^1.19.1",
-    "scss-parser": "^1.0.4",
     "ts-node": "^8.6.2",
-    "typescript": "^3.7.5",
-    "@types/jest": "^25.1.1",
-    "@types/node": "^13.7.0",
-    "jest": "^25.1.0"
+    "typescript": "^3.7.5"
   },
   "dependencies": {
     "chalk": "^3.0.0",
     "commander": "^4.1.1",
-    "glob": "^7.1.6"
+    "glob": "^7.1.6",
+    "read-by-char": "^0.1.1"
   }
 }

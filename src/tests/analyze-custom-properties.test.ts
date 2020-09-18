@@ -22,18 +22,9 @@ describe('analyzeCustomProperties', () => {
     globSpy.mockReset();
   });
 
-  it('sets logLevel to verbose', () => {
-    analyzeCustomProperties({});
+  it('sets logLevel to verbose', async () => {
+    await analyzeCustomProperties({});
     expect(consoleLogSpy).toHaveBeenCalledTimes(3);
-  });
-
-  it(`globs all css files by default`, () => {
-    analyzeCustomProperties({});
-    expect(globSpy).toHaveBeenCalledWith(
-      '**/*.css',
-      expect.any(Object),
-      expect.any(Function),
-    );
   });
 
   it(`catches errors rather than throwing`, async () => {
