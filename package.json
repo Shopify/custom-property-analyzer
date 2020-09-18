@@ -44,7 +44,8 @@
     "prebuild": "yarn clean",
     "build": "tsc --project ./tsconfig.json",
     "clean": "rm -rf ./dist ./coverage",
-    "custom-property-analyzer": "ts-node src/cli.ts"
+    "custom-property-analyzer": "ts-node src/cli.ts",
+    "prepublish": "yarn run build"
   },
   "prettier": {
     "arrowParens": "always",

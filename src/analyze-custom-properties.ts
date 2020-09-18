@@ -212,7 +212,7 @@ ${locations}
     }, {});
     // eslint-disable-next-line no-console
     console.log(chalk.underline.bold.magentaBright('Custom Properties'));
-    // eslint-disable-next-line node/no-unsupported-features/node-builtins, no-console
+    // eslint-disable-next-line no-console
     console.table(customPropertiesForTable);
 
     // eslint-disable-next-line no-console
