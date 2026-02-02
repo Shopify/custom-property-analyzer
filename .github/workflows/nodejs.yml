@@ -17,7 +17,7 @@ jobs:
       - name: Get yarn cache
         id: yarn-cache
         run: echo "::set-output name=dir::$(yarn cache dir)"
-      - uses: actions/cache@a505c2e7a6652a1d5727baf1c2dc5a5b2d1ecc60 # v1.1.0
+      - uses: actions/cache@cdf6c1fa76f9f475f3d7449005a359c84ca0f306 # v5.0.3
         with:
           path: ${{ steps.yarn-cache.outputs.dir }}
           key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
