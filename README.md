@@ -1,3 +1,5 @@
+> **This repository is no longer maintained.** It has been archived and receives no updates or security fixes.
+
 # Custom Property Analyzer
 
 Custom Property Analyzer is a tool for gathering statistics and identifying errors in css custom properties.
